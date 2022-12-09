@@ -2,6 +2,9 @@
 #define CGSOLVER_HPP
 
 #include <vector>
+#include "matvecops.hpp"
+
+const scalar NEARZERO = 1.0e-10;       // interpretation of "zero"
 
 /* Function that implements the CG algorithm for a linear system
  *
@@ -15,10 +18,10 @@
  */
 
 int CGSolver(std::vector<double> &val,
-             std::vector<int>    &row_ptr,
-             std::vector<int>    &col_idx,
+             std::vector<int> &row_ptr,
+             std::vector<int> &col_idx,
              std::vector<double> &b,
              std::vector<double> &x,
-             double              tol);
+             double tol);
 
 #endif /* CGSOLVER_HPP */

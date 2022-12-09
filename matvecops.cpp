@@ -34,6 +34,8 @@ coo_from_file(std::string file_name, Matrix_Coo &coo) {
     coo.rows.resize(array_size);
     coo.cols.resize(array_size);
     coo.values.resize(array_size);
+    coo.num_rows = m;
+    coo.num_cols = n;
 
     for (int i = 0; i < array_size; ++i) {
         input_stream >> coo.rows[i] >> coo.cols[i] >> coo.values[i];
@@ -166,7 +168,7 @@ void
 print_coo(Matrix_Coo &coo) {
     std::cout << "Dense in coo format" << std::endl;
     for (int i = 0; i < coo.rows.size(); ++i) {
-        std::cout << coo.rows[i] << coo.cols[i] << coo.values[i] << std::endl;
+        std::cout << coo.rows[i] << " " << coo.cols[i] << " " << coo.values[i] << std::endl;
     }
 }
 
@@ -207,6 +209,7 @@ vector_combination(scalar a, const std::vector<scalar> &U, scalar b, const std::
     for (int j = 0; j < n; j++) W[j] = a * U[j] + b * V[j];
     return W;
 }
+
 scalar
 vectorNorm(const std::vector<scalar> &V)                          // Vector norm
 {

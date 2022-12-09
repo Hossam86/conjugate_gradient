@@ -1,7 +1,6 @@
 #include "CGSolver.hpp"
 #include "matvecops.hpp"
 
-const scalar NEARZERO = 1.0e-10;       // interpretation of "zero"
 
 int CGSolver(std::vector<double> &val,
              std::vector<int> &row_ptr,
@@ -23,6 +22,8 @@ int CGSolver(std::vector<double> &val,
     csr.A = val;
     csr.JA = col_idx;
     csr.IA = row_ptr;
+    csr.num_rows = n;
+    csr.num_cols = n;
 
     while (k < n) {
         // Store previous residual
