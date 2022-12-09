@@ -3,7 +3,7 @@
 #include <vector>
 
 typedef double scalar;
-typedef std::vector<std::vector<scalar>> dense;
+typedef std::vector<std::vector<scalar>> Dense;
 
 struct Matrix_Coo {
     int num_rows;
@@ -22,16 +22,16 @@ struct Matrix_Csr {
 };
 
 void
-matrix_from_file(std::string file_name, dense &mat);
+matrix_from_file(std::string file_name, Dense &mat);
 
 void
 coo_from_file(std::string file_name, Matrix_Coo &coo);
 
 void
-dense_from_coo(Matrix_Coo &coo, dense &mat);
+dense_from_coo(Matrix_Coo &coo, Dense &mat);
 
 void
-coo_from_dense(dense &mat, Matrix_Coo &coo);
+coo_from_dense(Dense &mat, Matrix_Coo &coo);
 
 void
 csr_from_coo(Matrix_Coo &coo, Matrix_Csr &csr);
@@ -43,7 +43,7 @@ void
 matrix_csr_transpose(Matrix_Csr &csr, Matrix_Csr &csr_tran);
 
 void
-print_matrix(dense &mat);
+print_matrix(Dense &mat);
 
 void
 print_coo(Matrix_Coo &coo);

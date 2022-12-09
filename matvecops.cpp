@@ -3,7 +3,7 @@
 #include <fstream>
 
 void
-matrix_from_file(std::string file_name, dense &mat) {
+matrix_from_file(std::string file_name, Dense &mat) {
 
     std::ifstream input_stream;
     input_stream.open(file_name);
@@ -41,7 +41,7 @@ coo_from_file(std::string file_name, Matrix_Coo &coo) {
 }
 
 void
-dense_from_coo(Matrix_Coo &coo, dense &mat) {
+dense_from_coo(Matrix_Coo &coo, Dense &mat) {
     mat.resize(coo.num_rows);
     for (int i = 0; i < coo.num_rows; ++i) {
         mat[i].resize(coo.num_cols);
@@ -51,7 +51,7 @@ dense_from_coo(Matrix_Coo &coo, dense &mat) {
 }
 
 void
-coo_from_dense(dense &mat, Matrix_Coo &coo) {
+coo_from_dense(Dense &mat, Matrix_Coo &coo) {
     int array_size = mat.size() * mat[0].size();
 
     coo.num_rows = mat.size();
@@ -82,7 +82,7 @@ csr_from_coo(Matrix_Coo &coo, Matrix_Csr &csr) {
     int NNZ = 0;
 
     IA.push_back(0);
-    dense M{};
+    Dense M{};
     dense_from_coo(coo, M);
 
     for (int i = 0; i < m; i++) {
@@ -132,7 +132,7 @@ matrix_csr_transpose(Matrix_Csr &csr, Matrix_Csr &csr_tran) {
         auto col = csr.JA[i];
         cnt[col] += 1;
     }
-    //Cumulative sum to set the column pointer of dense B
+    //Cumulative sum to set the column pointer of Dense B
     for (int i = 1; i < csr.num_cols + 1; ++i) {
         csr_tran.IA[i] = csr_tran.IA[i - 1] + cnt[i - 1];
     }
@@ -153,8 +153,8 @@ matrix_csr_transpose(Matrix_Csr &csr, Matrix_Csr &csr_tran) {
 }
 
 void
-print_matrix(dense &mat) {
-    std::cout << "dense in native format" << std::endl;
+print_matrix(Dense &mat) {
+    std::cout << "Dense in native format" << std::endl;
     for (int i = 0; i < mat.size(); ++i) {
         for (int j = 0; j < mat[0].size(); ++j)
             std::cout << mat[i][j];
@@ -164,7 +164,7 @@ print_matrix(dense &mat) {
 
 void
 print_coo(Matrix_Coo &coo) {
-    std::cout << "dense in coo format" << std::endl;
+    std::cout << "Dense in coo format" << std::endl;
     for (int i = 0; i < coo.rows.size(); ++i) {
         std::cout << coo.rows[i] << coo.cols[i] << coo.values[i] << std::endl;
     }

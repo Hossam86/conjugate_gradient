@@ -5,8 +5,6 @@
 #include "matvecops.hpp"
 
 
-
-
 int main(int argc, char *argv[]) {
     /* Get command line arguments */
     if (argc != 3) {
@@ -17,8 +15,7 @@ int main(int argc, char *argv[]) {
     std::string input_matrix = argv[1];
     std::string solution = argv[2];
 
-
-    dense mat{};
+    Dense mat{};
     matrix_from_file(input_matrix, mat);
     print_matrix(mat);
 
@@ -29,16 +26,6 @@ int main(int argc, char *argv[]) {
     Matrix_Csr csr{};
     csr_from_coo(coo, csr);
     print_csr(csr);
-
-//    //test built-in function
-//    std::cout << "built in funcs \n";
-//
-//    Matrix_Csr csr2{};
-//    csr2.A = coo.values;
-//    csr2.IA = coo.rows;
-//    csr2.JA = coo.cols;
-//    COO2CSR(csr2.A, csr2.IA, csr2.JA);
-//    print_csr(csr2);
 
     // test transpose
     std::cout << "test transpose \n";
