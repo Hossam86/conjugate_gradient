@@ -101,9 +101,9 @@ csr_from_coo(Matrix_Coo &coo, Matrix_Csr &csr) {
 }
 
 
-void
-csr_vector_mult(Matrix_Csr &csr, std::vector<scalar> &v, std::vector<scalar> &result) {
-    result.resize(csr.num_cols);
+std::vector<scalar>
+csr_vector_mult(Matrix_Csr &csr, std::vector<scalar> &v) {
+    std::vector<scalar> result(csr.num_cols);
     std::fill(result.begin(), result.end(), 0.0);
     for (int i = 0; i < csr.num_cols; ++i) {
         for (int j = csr.IA[i]; j < csr.IA[i + 1]; ++j) {
@@ -111,7 +111,7 @@ csr_vector_mult(Matrix_Csr &csr, std::vector<scalar> &v, std::vector<scalar> &re
             result[i] += csr.A[j] * v[idx];
         }
     }
-
+    return result;
 }
 
 void
@@ -190,3 +190,27 @@ print_csr(Matrix_Csr &csr) {
     }
     std::cout << "}" << std::endl;
 }
+
+scalar
+dot(const std::vector<scalar> &a, const std::vector<scalar> &b) {
+    double result = 0.0;
+    for (int c = 0; c < a.size(); c++) {
+        result += a[c] * b[c];
+    }
+    return result;
+}
+
+std::vector<scalar>
+vector_combination(scalar a, const std::vector<scalar> &U, scalar b, const std::vector<scalar> &V) {
+    int n = U.size();
+    std::vector<scalar> W(n);
+    for (int j = 0; j < n; j++) W[j] = a * U[j] + b * V[j];
+    return W;
+}
+scalar
+vectorNorm(const std::vector<scalar> &V)                          // Vector norm
+{
+    return sqrt(dot(V, V));
+}
+
+

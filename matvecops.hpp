@@ -36,8 +36,8 @@ coo_from_dense(Dense &mat, Matrix_Coo &coo);
 void
 csr_from_coo(Matrix_Coo &coo, Matrix_Csr &csr);
 
-void
-csr_vector_mult(Matrix_Csr &csr, std::vector<scalar> &v, std::vector<scalar> &result);
+std::vector<scalar>
+csr_vector_mult(Matrix_Csr &csr, std::vector<scalar> &v);
 
 void
 matrix_csr_transpose(Matrix_Csr &csr, Matrix_Csr &csr_tran);
@@ -51,5 +51,14 @@ print_coo(Matrix_Coo &coo);
 void
 print_csr(Matrix_Csr &csr);
 
+scalar
+dot(const std::vector<scalar> &a, const std::vector<scalar> &b);
 
+// Linear combination of vectors
+std::vector<scalar>
+vector_combination(scalar a, const std::vector<scalar> &U, scalar b, const std::vector<scalar> &V);
+
+// Vector norm
+scalar
+vectorNorm(const std::vector<scalar> &V);
 
