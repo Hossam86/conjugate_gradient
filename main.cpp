@@ -20,10 +20,17 @@ int main(int argc, char *argv[]) {
 
     input_stream >> m >> n;
     float mat[m][n];
+
+    // working vars
+    size_t idx_row, idx_col;
+    float value;
+
+    std::cout << "Matrix rows x cols -->  " << m << " x " << n << std::endl;
     for (int i = 0; i < m; ++i) {
         for (int j = 0; j < n; ++j) {
-            float temp;
-            input_stream >> mat[i][j];
+
+            input_stream >> idx_row >> idx_col >> value;
+            mat[idx_row][idx_col] = value;
         }
     }
 
