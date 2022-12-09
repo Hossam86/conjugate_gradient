@@ -1,4 +1,4 @@
-## Input matrix are in COO format as below
+## Input dense are in COO format as below
 
 COO format:
 

@@ -3,4 +3,4 @@ project(conjugate)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(conjugate main.cpp CGSolver.cpp COO2CSR2.cpp COO2CSR2.hpp CGSolver.hpp)
+add_executable(conjugate main.cpp CGSolver.cpp CGSolver.hpp matvecops.hpp matvecops.cpp)
