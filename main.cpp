@@ -16,9 +16,23 @@ int main(int argc, char *argv[]) {
 
     std::ifstream input_stream;
     input_stream.open(input_matrix);
-    int n, m;
+    int n = 0, m = 0;
 
+    input_stream >> m >> n;
+    float mat[m][n];
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            float temp;
+            input_stream >> mat[i][j];
+        }
+    }
 
+    // print matrix
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j)
+            std::cout << mat[i][j] << " ";
+        std::cout << "\n";
+    }
 
     return 0;
 }
