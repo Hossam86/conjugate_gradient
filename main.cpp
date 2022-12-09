@@ -71,10 +71,11 @@ int main(int argc, char *argv[]) {
 
     /* test solver 2*/
     double tol = 1e-5;
-    std::vector<scalar> B(csr.num_rows, 0.0);
+    std::vector<scalar> B(csr.num_rows, 1.0);
     std::vector<scalar> X(csr.num_rows, 0.0);
-    CGSolver(csr.A, csr.IA, csr.JA, B, X, tol);
+    auto converge = CGSolver(csr.A, csr.IA, csr.JA, B, X, tol);
     print("\nX:", X);
+    std::cout << converge << std::endl;
 
 
     return 0;

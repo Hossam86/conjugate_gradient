@@ -36,13 +36,16 @@ int CGSolver(std::vector<double> &val,
         // Residual
         R = vector_combination(1.0, R, -alpha, AP);
 
-        if (vectorNorm(R) < TOLERANCE) break;             // Convergence test
+        // Convergence test
+        if (vectorNorm(R) < TOLERANCE) {
+            return k;
+        }
 
         double beta = dot(R, R) / fmax(dot(Rold, Rold), NEARZERO);
         P = vector_combination(1.0, R, beta, P);             // Next gradient
         k++;
     }
 
-    return 0;
+    return -1;
 
 }
