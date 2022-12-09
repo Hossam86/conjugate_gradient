@@ -1,4 +1,4 @@
-#include "COO2CSR.hpp"
+#include "COO2CSR2.hpp"
 #include <cassert>
 #include <map>
 #include <vector>

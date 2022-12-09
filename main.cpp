@@ -2,8 +2,9 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include "COO2CSR.hpp"
 
-typedef float scalar;
+typedef double scalar;
 typedef std::vector<std::vector<scalar>> matrix;
 
 struct matrix_coo {
@@ -15,7 +16,9 @@ struct matrix_coo {
 };
 
 struct matrix_csr {
-
+    std::vector<scalar> A;
+    std::vector<int> IA;
+    std::vector<int> JA;
 };
 
 void
@@ -57,12 +60,12 @@ matrix_coo_from_file(std::string file_name, matrix_coo &mat) {
 
 void
 from_coo_to_mat(matrix_coo &coo, matrix &mat) {
-    matrix result(coo.row_count);
+    mat.resize(coo.row_count);
     for (int i = 0; i < coo.row_count; ++i) {
-        result[i].resize(coo.col_count);
+        mat[i].resize(coo.col_count);
     }
     for (int i = 0; i < coo.rows.size(); ++i)
-        result[coo.rows[i]][coo.cols[i]] = coo.values[i];
+        mat[coo.rows[i]][coo.cols[i]] = coo.values[i];
 }
 
 void
@@ -101,8 +104,55 @@ print_coo(matrix_coo &coo) {
 }
 
 void
-from_coo_to_csr(matrix_coo, matrix_csr) {
+print_csr(matrix_csr &csr) {
+    std::cout << "A --> {";
+    for (int i = 0; i < csr.A.size(); ++i) {
+        std::cout << csr.A[i] << ",";
+    }
+    std::cout << "}" << std::endl;
 
+    std::cout << "IA --> {";
+    for (int i = 0; i < csr.IA.size(); ++i) {
+        std::cout << csr.IA[i] << ",";
+    }
+    std::cout << "}" << std::endl;
+
+    std::cout << "JA --> {";
+    for (int i = 0; i < csr.JA.size(); ++i) {
+        std::cout << csr.JA[i] << ",";
+    }
+    std::cout << "}" << std::endl;
+}
+
+// Generate the three vectors A, IA, JA
+void
+from_coo_to_csr(matrix_coo &coo, matrix_csr &csr) {
+    int m = coo.row_count;
+    int n = coo.col_count;
+
+
+    auto &A = csr.A;
+    auto &IA = csr.IA;
+    auto &JA = csr.JA;
+    int NNZ = 0;
+
+    IA.push_back(0);
+    matrix M{};
+    from_coo_to_mat(coo, M);
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (M[i][j] != 0) {
+                A.push_back(M[i][j]);
+                JA.push_back(j);
+
+                // Count Number of Non Zero
+                // Elements in row i
+                NNZ++;
+            }
+        }
+        IA.push_back(NNZ);
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -123,6 +173,17 @@ int main(int argc, char *argv[]) {
     matrix_coo coo{};
     from_mat_to_coo(mat, coo);
     print_coo(coo);
+
+    matrix_csr csr{};
+    from_coo_to_csr(coo, csr);
+    print_csr(csr);
+
+    matrix_csr csr2{};
+    csr2.A = coo.values;
+    csr2.IA = coo.rows;
+    csr2.JA = coo.cols;
+    COO2CSR(csr2.A, csr2.IA, csr2.JA);
+    print_csr(csr2);
 
     return 0;
 }
