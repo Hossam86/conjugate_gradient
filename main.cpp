@@ -8,14 +8,16 @@ typedef double scalar;
 typedef std::vector<std::vector<scalar>> matrix;
 
 struct matrix_coo {
-    int row_count;
-    int col_count;
+    int num_rows;
+    int num_cols;
     std::vector<int> rows;
     std::vector<int> cols;
     std::vector<scalar> values;
 };
 
 struct matrix_csr {
+    int num_rows;
+    int num_cols;
     std::vector<scalar> A;
     std::vector<int> IA;
     std::vector<int> JA;
@@ -60,9 +62,9 @@ matrix_coo_from_file(std::string file_name, matrix_coo &mat) {
 
 void
 from_coo_to_mat(matrix_coo &coo, matrix &mat) {
-    mat.resize(coo.row_count);
-    for (int i = 0; i < coo.row_count; ++i) {
-        mat[i].resize(coo.col_count);
+    mat.resize(coo.num_rows);
+    for (int i = 0; i < coo.num_rows; ++i) {
+        mat[i].resize(coo.num_cols);
     }
     for (int i = 0; i < coo.rows.size(); ++i)
         mat[coo.rows[i]][coo.cols[i]] = coo.values[i];
@@ -72,11 +74,11 @@ void
 from_mat_to_coo(matrix &mat, matrix_coo &coo) {
     int array_size = mat.size() * mat[0].size();
 
-    coo.row_count = mat.size();
-    coo.col_count = mat[0].size();
+    coo.num_rows = mat.size();
+    coo.num_cols = mat[0].size();
 
-    for (int i = 0; i < coo.row_count; ++i) {
-        for (int j = 0; j < coo.col_count; ++j) {
+    for (int i = 0; i < coo.num_rows; ++i) {
+        for (int j = 0; j < coo.num_cols; ++j) {
             coo.values.push_back(mat[i][j]);
             coo.rows.push_back(i);
             coo.cols.push_back(j);
@@ -127,8 +129,8 @@ print_csr(matrix_csr &csr) {
 // Generate the three vectors A, IA, JA
 void
 from_coo_to_csr(matrix_coo &coo, matrix_csr &csr) {
-    int m = coo.row_count;
-    int n = coo.col_count;
+    int m = coo.num_rows;
+    int n = coo.num_cols;
 
 
     auto &A = csr.A;
@@ -154,6 +156,8 @@ from_coo_to_csr(matrix_coo &coo, matrix_csr &csr) {
         IA.push_back(NNZ);
     }
 }
+
+
 
 int main(int argc, char *argv[]) {
     /* Get command line arguments */
