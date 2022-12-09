@@ -23,6 +23,7 @@ struct matrix_csr {
     std::vector<int> JA;
 };
 
+
 void
 matrix_from_file(std::string file_name, matrix &mat) {
 
@@ -42,6 +43,45 @@ matrix_from_file(std::string file_name, matrix &mat) {
         }
 
     }
+}
+
+//transpose
+void
+matrix_csr_transpose(matrix_csr &csr, matrix_csr &csr_tran) {
+
+    auto nnz = csr.A.size();
+    csr_tran.A.resize(nnz);
+    csr_tran.JA.resize(nnz);
+    csr_tran.IA.resize(csr.num_rows + 1);
+
+    csr_tran.IA[0] = 0;
+
+    // Count elements in each column:
+    std::vector<int> cnt(csr.num_cols);
+    std::fill(cnt.begin(), cnt.end(), 0);
+
+    for (int i = 0; i < nnz; ++i) {
+        auto col = csr.JA[i];
+        cnt[col] += 1;
+    }
+    //Cumulative sum to set the column pointer of matrix B
+    for (int i = 1; i < csr.num_cols + 1; ++i) {
+        csr_tran.IA[i] = csr_tran.IA[i - 1] + cnt[i - 1];
+    }
+
+    for (int i = 0; i < csr.num_rows; ++i) {
+        for (int j = csr.IA[i]; j < csr.IA[i + 1]; ++j) {
+            auto col = csr.JA[j];
+            auto dest = csr_tran.IA[col];
+
+            csr_tran.JA[dest] = i;
+            csr_tran.A[dest] = csr.A[j];
+            csr_tran.IA[col] += 1;
+        }
+    }
+    // shift csr_tran.IA;
+    csr_tran.IA.insert(std::begin(csr_tran.IA), 0);
+    csr_tran.IA.pop_back();
 }
 
 void
@@ -132,7 +172,8 @@ from_coo_to_csr(matrix_coo &coo, matrix_csr &csr) {
     int m = coo.num_rows;
     int n = coo.num_cols;
 
-
+    csr.num_rows = m;
+    csr.num_cols = n;
     auto &A = csr.A;
     auto &IA = csr.IA;
     auto &JA = csr.JA;
@@ -157,8 +198,6 @@ from_coo_to_csr(matrix_coo &coo, matrix_csr &csr) {
     }
 }
 
-
-
 int main(int argc, char *argv[]) {
     /* Get command line arguments */
     if (argc != 3) {
@@ -182,12 +221,24 @@ int main(int argc, char *argv[]) {
     from_coo_to_csr(coo, csr);
     print_csr(csr);
 
+    //test built-in function
+    std::cout << "built in funcs \n";
+
     matrix_csr csr2{};
     csr2.A = coo.values;
     csr2.IA = coo.rows;
     csr2.JA = coo.cols;
     COO2CSR(csr2.A, csr2.IA, csr2.JA);
     print_csr(csr2);
+
+    // test transpose
+    std::cout << "test transpose \n";
+    matrix_csr csr_t;
+    matrix_csr_transpose(csr, csr_t);
+    std::cout << "A in csr form \n";
+    print_csr(csr);
+    std::cout << "AT in csr form \n";
+    print_csr(csr_t);
 
     return 0;
 }
