@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -g -std=c++11
+CFLAGS = -Wall -g
  
 # ****************************************************
 # Targets needed to bring the executable up to date

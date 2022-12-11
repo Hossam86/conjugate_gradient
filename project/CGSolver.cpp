@@ -12,7 +12,7 @@ int CGSolver(std::vector<double> &val,
     int n = x.size();
 
 
-    Matrix_Csr csr;
+    Matrix_Csr csr{};
     csr.A = val;
     csr.JA = col_idx;
     csr.IA = row_ptr;

@@ -84,7 +84,7 @@ csr_from_coo(Matrix_Coo &coo, Matrix_Csr &csr) {
     int NNZ = 0;
 
     IA.push_back(0);
-    Dense M;
+    Dense M{};
     dense_from_coo(coo, M);
 
     for (int i = 0; i < m; i++) {
